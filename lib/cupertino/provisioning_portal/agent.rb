@@ -1,6 +1,7 @@
 require 'mechanize'
 require 'security'
 require 'json'
+require 'logger'
 
 module Cupertino
   module ProvisioningPortal
@@ -13,6 +14,12 @@ module Cupertino
 
         pw = Security::InternetPassword.find(:server => Cupertino::ProvisioningPortal::HOST)
         @username, @password = pw.attributes['acct'], pw.password if pw
+      end
+
+      def log_level(level)
+        log = Logger.new(STDOUT)
+        log.level = level
+        @log = log
       end
 
       def get(uri, parameters = [], referer = nil, headers = {})
@@ -200,7 +207,9 @@ module Cupertino
 
         list_profiles(profile.type)
 
-        get(profile.edit_url)
+        #say_warning profile.edit_url
+
+        post(profile.edit_url)            #XXX
 
         on, off = [], []
         page.search('dd.selectDevices div.rows div').each do |row|
@@ -220,16 +229,24 @@ module Cupertino
         devices = yield on, off
 
         form = page.form_with(:name => 'profileEdit') or raise UnexpectedContentError
+
+        #form.fields.each { |f| puts f.name }
+
+
         form.checkboxes_with(:name => 'deviceIds').each do |checkbox|
           checkbox.check
           if devices.detect{|device| device.udid == checkbox['value']}
             checkbox.check
+            #say_warning checkbox['value']
+            #say_warning "checked"
           else
             checkbox.uncheck
+            #say_warning checkbox['value']
+            #say_warning "unchecked"
           end
         end
 
-        form.method = 'POST'
+        form.method = 'GET'
         form.submit
       end
 
