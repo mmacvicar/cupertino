@@ -2,15 +2,8 @@ command :'profiles:list' do |c|
   c.syntax = 'ios profiles:list [development|distribution]'
   c.summary = 'Lists the Provisioning Profiles'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
-
     type = args.first.downcase.to_sym rescue nil
     profiles = try{agent.list_profiles(type ||= :development)}
 
@@ -41,14 +34,8 @@ command :'profiles:download' do |c|
   c.syntax = 'ios profiles:download'
   c.summary = 'Downloads the Provisioning Profiles'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
 
     type = args.first.downcase.to_sym rescue nil
     profiles = try{agent.list_profiles(type ||= :development)}
@@ -69,9 +56,6 @@ command :'profiles:download:all' do |c|
   c.syntax = 'ios profiles:download:all [development|distribution]'
   c.summary = 'Downloads all the active Provisioning Profiles'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
     agent.username = options.username unless options.username.nil?
@@ -97,14 +81,8 @@ command :'profiles:manage:devices' do |c|
   c.syntax = 'ios profiles:manage:devices'
   c.summary = 'Manage active devices for a development provisioning profile'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
 
     type = args.first.downcase.to_sym rescue nil
     profiles = try{agent.list_profiles(type ||= :development)}
@@ -143,14 +121,8 @@ command :'profiles:manage:devices:add' do |c|
   c.syntax = 'ios profiles:manage:devices:add PROFILE_NAME DEVICE_NAME=DEVICE_ID [...]'
   c.summary = 'Add active devices to a Provisioning Profile'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
 
     type = args.first.downcase.to_sym rescue nil
     profiles = try{agent.list_profiles(type ||= :development)}
@@ -181,15 +153,8 @@ command :'profiles:manage:devices:remove' do |c|
   c.syntax = 'ios profiles:manage:devices:remove PROFILE_NAME DEVICE_NAME=DEVICE_ID [...]'
   c.summary = 'Remove active devices from a Provisioning Profile.'
   c.description = ''
-  c.option '-u', '--username USER', 'Username'
-  c.option '-p', '--password PASSWORD', 'Password'
-  c.option '-tm', '--team TEAM', 'Team'
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
-
     profiles = try{agent.list_profiles(:development) + agent.list_profiles(:distribution)}
     profile = profiles.find {|profile| profile.name == args.first }
 
