@@ -207,8 +207,6 @@ module Cupertino
 
         list_profiles(profile.type)
 
-        #say_warning profile.edit_url
-
         post(profile.edit_url)            #XXX
 
         on, off = [], []
@@ -229,20 +227,12 @@ module Cupertino
         devices = yield on, off
 
         form = page.form_with(:name => 'profileEdit') or raise UnexpectedContentError
-
-        #form.fields.each { |f| puts f.name }
-
-
         form.checkboxes_with(:name => 'deviceIds').each do |checkbox|
           checkbox.check
           if devices.detect{|device| device.udid == checkbox['value']}
             checkbox.check
-            #say_warning checkbox['value']
-            #say_warning "checked"
           else
             checkbox.uncheck
-            #say_warning checkbox['value']
-            #say_warning "unchecked"
           end
         end
 

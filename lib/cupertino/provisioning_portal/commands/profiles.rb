@@ -58,9 +58,6 @@ command :'profiles:download:all' do |c|
   c.description = ''
 
   c.action do |args, options|
-    agent.username = options.username unless options.username.nil?
-    agent.password = options.password unless options.password.nil?
-    agent.team = options.team unless options.team.nil?
 
     type = args.first.downcase.to_sym rescue nil
     profiles = try{agent.list_profiles(type ||= :development)}
